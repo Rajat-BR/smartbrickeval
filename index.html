@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Brick Quality Evaluation System</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-badge">INTER DISCIPLINARY MINI PROJECT</div>
+      <h1 class="site-title">Smart Brick Quality<br>Evaluation System</h1>
+      <p class="site-subtitle">Laboratory Test Parameter Analysis &amp; Quality Decision Support</p>
+      <div class="header-rule"></div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-container">
+
+    <!-- INSTRUCTIONS PANEL -->
+    <section class="info-panel">
+      <div class="info-icon">ℹ</div>
+      <p>Enter the values obtained from standard laboratory tests. The system will evaluate brick quality based on predefined acceptance criteria for each brick type.</p>
+    </section>
+
+    <!-- EVALUATION FORM -->
+    <section class="form-card">
+      <div class="form-section-title">
+        <span class="section-num">01</span>
+        <h2>Brick Specification</h2>
+      </div>
+
+      <!-- BRICK TYPE -->
+      <div class="field-group">
+        <label for="brickType">Brick Type <span class="required">*</span></label>
+        <select id="brickType">
+          <option value="" disabled selected>— Select Brick Type —</option>
+          <option value="clay">Clay Brick</option>
+          <option value="flyash">Fly Ash Brick</option>
+          <option value="concrete">Concrete Brick</option>
+          <option value="sandlime">Sand Lime Brick</option>
+          <option value="interlocking">Interlocking Brick</option>
+        </select>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="form-section-title">
+        <span class="section-num">02</span>
+        <h2>Laboratory Test Parameters</h2>
+      </div>
+
+      <div class="fields-grid">
+
+        <div class="field-group">
+          <label for="compressiveStrength">
+            Compressive Strength
+            <span class="unit">(MPa)</span>
+          </label>
+          <input type="number" id="compressiveStrength" placeholder="e.g. 7.5" min="0" step="0.1" />
+          <span class="field-hint">Minimum acceptable varies by brick type</span>
+        </div>
+
+        <div class="field-group">
+          <label for="waterAbsorption">
+            Water Absorption
+            <span class="unit">(%)</span>
+          </label>
+          <input type="number" id="waterAbsorption" placeholder="e.g. 15" min="0" max="100" step="0.1" />
+          <span class="field-hint">Should not exceed IS code limits</span>
+        </div>
+
+        <div class="field-group">
+          <label for="efflorescence">
+            Efflorescence Level
+            <span class="unit">(Visual Rating)</span>
+          </label>
+          <select id="efflorescence">
+            <option value="" disabled selected>— Select Level —</option>
+            <option value="nil">Nil</option>
+            <option value="slight">Slight</option>
+            <option value="moderate">Moderate</option>
+            <option value="heavy">Heavy</option>
+            <option value="serious">Serious</option>
+          </select>
+          <span class="field-hint">Based on IS 3495 salt deposit test</span>
+        </div>
+
+        <div class="field-group">
+          <label for="dimensionTolerance">
+            Dimension Tolerance
+            <span class="unit">(mm)</span>
+          </label>
+          <input type="number" id="dimensionTolerance" placeholder="e.g. 3" min="0" step="0.5" />
+          <span class="field-hint">Deviation from standard dimensions</span>
+        </div>
+
+        <div class="field-group">
+          <label for="weight">
+            Weight
+            <span class="unit">(kg)</span>
+          </label>
+          <input type="number" id="weight" placeholder="e.g. 3.2" min="0" step="0.1" />
+          <span class="field-hint">Per individual brick unit</span>
+        </div>
+
+        <div class="field-group">
+          <label for="crackPresence">
+            Crack Presence
+          </label>
+          <select id="crackPresence">
+            <option value="" disabled selected>— Select —</option>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+          <span class="field-hint">Visible cracks on surface or edges</span>
+        </div>
+
+        <div class="field-group">
+          <label for="shapeIrregularity">
+            Shape Irregularity
+          </label>
+          <select id="shapeIrregularity">
+            <option value="" disabled selected>— Select —</option>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+          <span class="field-hint">Warping, chipping, or deformation</span>
+        </div>
+
+      </div>
+
+      <!-- EVALUATE BUTTON -->
+      <div class="btn-row">
+        <button id="evaluateBtn" onclick="evaluateBrick()">
+          <span class="btn-icon">▶</span>
+          Evaluate Brick
+        </button>
+        <button id="resetBtn" class="btn-secondary" onclick="resetForm()">
+          Reset
+        </button>
+      </div>
+    </section>
+
+    <!-- RESULT SECTION (hidden by default) -->
+    <section class="result-card" id="resultCard" style="display:none;">
+      <div class="result-header">
+        <div class="form-section-title">
+          <span class="section-num">03</span>
+          <h2>Evaluation Result</h2>
+        </div>
+      </div>
+
+      <div class="result-body">
+        <div class="result-meta">
+          <div class="meta-item">
+            <span class="meta-label">Brick Type</span>
+            <span class="meta-value" id="resBrickType">—</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Evaluation Date</span>
+            <span class="meta-value" id="resDate">—</span>
+          </div>
+        </div>
+
+        <div class="quality-badge-row">
+          <div class="quality-badge" id="qualityBadge">—</div>
+          <div class="quality-label" id="qualityLabel">Quality Rating</div>
+        </div>
+
+        <div class="recommendation-box" id="recommendationBox">
+          <div class="rec-title">Suitability Recommendation</div>
+          <p id="recommendationText">—</p>
+        </div>
+
+        <div class="reasons-box" id="reasonsBox">
+          <div class="reasons-title">Detailed Analysis</div>
+          <ul id="reasonsList"></ul>
+        </div>
+
+        <div class="param-summary" id="paramSummary">
+          <div class="param-summary-title">Parameter Summary</div>
+          <table id="paramTable">
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Entered Value</th>
+                <th>Acceptable Range</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="paramTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <p>Smart Brick Quality Evaluation System &nbsp;|&nbsp; Interdisciplinary Mini Project </p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
