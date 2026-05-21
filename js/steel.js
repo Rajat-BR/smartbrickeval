@@ -86,15 +86,15 @@ const STEEL_CRITERIA = {
     hint:           'Absolute deviation from nominal diameter; affects bond strength'
   },
   weightPerMeter: {
-    label:          'Weight per Metre',
-    unit:           'kg/m',
+    label:          'Weight per Metre Deviation',
+    unit:           '%',
     weight:         10,
-    good:           0.06,  /* within ±3% of theoretical: enter actual abs deviation fraction */
-    avg:            0.10,  /* within ±5% */
+    good:           3,  /* within ±3% of theoretical: enter actual abs deviation fraction */
+    avg:            5,  /* within ±5% */
     standard:       'IS 1786: Tolerance ± 3% (Good), ± 5% (Marginal) of theoretical',
     higherIsBetter: false,
     max:            1.0,
-    hint:           'Enter absolute % deviation from theoretical weight (e.g. 2.5 for 2.5% under/over)'
+    hint: 'Enter absolute % deviation from theoretical weight (e.g. 2.5 for 2.5% under/over)'
   }
 };
 

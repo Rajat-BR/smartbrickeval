@@ -56,20 +56,20 @@ const AGGREGATE_CRITERIA = {
     label:          'Aggregate Impact Value',
     unit:           '%',
     weight:         20,
-    good:           30,
-    avg:            50,
-    standard:       'IS 2386 (Pt IV): < 30% (Good), < 50% (Avg)',
+    good:           25,
+    avg:            35,
+    standard:       'IS 2386 (Pt IV): < 25% (Good), < 35% (Avg)',
     higherIsBetter: false,
     max:            60,
-    hint:           '< 30% for pavement; < 50% for general concrete'
+    hint:           '< 25% for pavement; < 35% for general concrete'
   },
   flakinessIndex: {
     label:          'Flakiness Index',
     unit:           '%',
     weight:         10,
-    good:           25,
-    avg:            35,
-    standard:       'IS 2386 (Pt I): < 25% (Good), < 35% (Avg)',
+    good:           20,
+    avg:            25,
+    standard:       'IS 2386 (Pt I): < 20% (Good), < 25% (Avg)',
     higherIsBetter: false,
     max:            60,
     hint:           'Elongated particles reduce workability and strength'
