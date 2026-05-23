@@ -21,7 +21,7 @@
 const AGGREGATE_CRITERIA = {
   specificGravity: {
     label:          'Specific Gravity',
-    unit:           'g/cm³',
+    unit:           '',
     weight:         20,
     good:           2.6,
     avg:            2.5,
@@ -114,7 +114,7 @@ function renderAggregateForm() {
       <!-- Sub-type selector -->
       <div class="fields-grid">
         <div class="field-group field-wide">
-          <label for="agg_type">Aggregate Type <span class="required">*</span></label>
+          <label for="agg_type">Aggregate Type</label>
           <select id="agg_type">
             <option value="">— Select type —</option>
             <option value="Coarse Aggregate (Natural)">Coarse Aggregate (Natural)</option>
@@ -136,7 +136,7 @@ function renderAggregateForm() {
           <label for="agg_${key}">
             ${cfg.label}
             <span class="unit">(${cfg.unit})</span>
-            <span class="required">*</span>
+            <span class="info-icon-tooltip" data-tooltip="${cfg.hint}">ⓘ</span>
           </label>
           <input
             type="number"
@@ -146,7 +146,7 @@ function renderAggregateForm() {
             max="${cfg.max}"
             placeholder="e.g. ${_aggPlaceholder(key)}"
           />
-          <span class="field-hint">${cfg.hint}</span>
+          <span class="field-hint">${cfg.standard}</span>
         </div>
         `).join('')}
 

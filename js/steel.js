@@ -124,7 +124,7 @@ function renderSteelForm() {
       <!-- Bar type + nominal diameter selectors -->
       <div class="fields-grid">
         <div class="field-group">
-          <label for="steel_barType">Bar Origin <span class="required">*</span></label>
+          <label for="steel_barType">Bar Origin</label>
           <select id="steel_barType">
             <option value="">— Select origin —</option>
             <option value="New Production Bar">New Production Bar</option>
@@ -134,7 +134,7 @@ function renderSteelForm() {
           </select>
         </div>
         <div class="field-group">
-          <label for="steel_nomDia">Nominal Diameter <span class="unit">(mm)</span> <span class="required">*</span></label>
+          <label for="steel_nomDia">Nominal Diameter <span class="unit">(mm)</span></label>
           <select id="steel_nomDia">
             <option value="">— Select size —</option>
             <option value="8">8 mm</option>
@@ -158,7 +158,7 @@ function renderSteelForm() {
           <label for="steel_${key}">
             ${cfg.label}
             <span class="unit">(${cfg.unit})</span>
-            <span class="required">*</span>
+            <span class="info-icon-tooltip" data-tooltip="${cfg.hint}">ⓘ</span>
           </label>
           <input
             type="number"
@@ -168,7 +168,7 @@ function renderSteelForm() {
             max="${cfg.max}"
             placeholder="e.g. ${_steelPlaceholder(key)}"
           />
-          <span class="field-hint">${cfg.hint}</span>
+          <span class="field-hint">${cfg.standard}</span>
         </div>
         `).join('')}
 

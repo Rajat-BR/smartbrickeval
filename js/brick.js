@@ -121,7 +121,7 @@ function renderBrickForm() {
       <!-- Brick sub-type selector -->
       <div class="fields-grid">
         <div class="field-group field-wide">
-          <label for="brick_type">Brick Type <span class="required">*</span></label>
+          <label for="brick_type">Brick Type</label>
           <select id="brick_type">
             <option value="">— Select brick type —</option>
             <option value="Clay Brick (First Class)">Clay Brick — First Class</option>
@@ -145,7 +145,7 @@ function renderBrickForm() {
           <label for="brick_${key}">
             ${cfg.label}
             <span class="unit">(${cfg.unit})</span>
-            <span class="required">*</span>
+            <span class="info-icon-tooltip" data-tooltip="${cfg.hint}">ⓘ</span>
           </label>
           <input
             type="number"
@@ -155,7 +155,7 @@ function renderBrickForm() {
             max="${cfg.max}"
             placeholder="e.g. ${_brickPlaceholder(key)}"
           />
-          <span class="field-hint">${cfg.hint}</span>
+          <span class="field-hint">${cfg.standard}</span>
         </div>
         `).join('')}
 

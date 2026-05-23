@@ -777,6 +777,81 @@ input.invalid, select.invalid { border-color: var(--poor); background: #fff8f8; 
 .site-footer p { font-size: 12.5px; color: var(--text-muted); margin-bottom: 4px; }
 .footer-sub    { font-size: 11.5px; color: #b0a898; }
 
+/* ---- TOOLTIPS ----------------------------------------------- */
+.info-icon-tooltip {
+  position: relative;
+  display: inline-block;
+  margin-left: 6px;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 13px;
+  transition: color 0.15s ease;
+  text-transform: none; /* Keep icon neutral */
+}
+
+.info-icon-tooltip:hover {
+  color: var(--accent);
+}
+
+/* Tooltip container */
+.info-icon-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%; /* Position above the icon */
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  background: var(--navy);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-family: var(--font-body);
+  font-weight: 400;
+  text-transform: none; /* Override upper case of labels */
+  letter-spacing: normal;
+  line-height: 1.4;
+  white-space: normal;
+  width: 220px; /* Max width for wrapping */
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Arrow */
+.info-icon-tooltip::before {
+  content: '';
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%) translateY(14px);
+  border-width: 6px 6px 0;
+  border-style: solid;
+  border-color: var(--navy) transparent transparent;
+  display: block;
+  width: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Hover state */
+.info-icon-tooltip:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.info-icon-tooltip:hover::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(6px);
+}
+
 /* ---- RESPONSIVE --------------------------------------------- */
 @media (max-width: 640px) {
   .site-header    { padding: 32px 20px 28px; }
