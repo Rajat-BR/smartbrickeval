@@ -3,182 +3,120 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart Brick Quality Evaluation System</title>
+  <title>C&D Material Quality Evaluation System</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 </head>
 <body>
 
   <!-- HEADER -->
   <header class="site-header">
     <div class="header-inner">
-      <div class="header-badge">INTERDISCIPLINARY MINI PROJECT</div>
-      <h1 class="site-title">Smart Brick Quality<br>Evaluation System</h1>
-      <p class="site-subtitle">Laboratory Test Parameter Analysis &amp; Quality Decision Support</p>
-      <div class="header-rule"></div>
+      <div class="header-top-row">
+        <span class="header-tag">Interdisciplinary · Project</span>
+        <span class="header-tag accent-tag">SDG 11 &amp; 12 Aligned</span>
+      </div>
+      <h1 class="site-title">Smart C&amp;D Material<br>Quality Evaluation</h1>
+      <p class="site-subtitle">
+        Standardised evaluation of reusable Construction &amp; Demolition waste materials
+        using IS code thresholds and weighted scoring analysis.
+      </p>
+      <div class="header-stats">
+        <div class="hstat"><span class="hstat-num">3</span><span class="hstat-label">Material Types</span></div>
+        <div class="hstat-div"></div>
+        <div class="hstat"><span class="hstat-num">IS</span><span class="hstat-label">Code Based</span></div>
+        <div class="hstat-div"></div>
+        <div class="hstat"><span class="hstat-num">C&amp;D</span><span class="hstat-label">Waste Focus</span></div>
+      </div>
     </div>
   </header>
 
-  <!-- MAIN CONTENT -->
+  <!-- MAIN -->
   <main class="main-container">
 
-    <!-- INSTRUCTIONS PANEL -->
-    <section class="info-panel">
-      <div class="info-icon">ℹ</div>
-      <p>Enter the values obtained from standard laboratory tests. The system will evaluate brick quality based on predefined acceptance criteria for each brick type.</p>
-    </section>
-
-    <!-- EVALUATION FORM -->
-    <section class="form-card">
-      <div class="form-section-title">
-        <span class="section-num">01</span>
-        <h2>Brick Specification</h2>
+    <!-- MATERIAL SELECTOR -->
+    <section class="material-selector" id="materialSelector">
+      <div class="selector-header">
+        <div class="step-pill">Step 01</div>
+        <h2>Select Material Type</h2>
+        <p>Choose the construction material recovered from demolition or recycled sources for quality evaluation.</p>
       </div>
+      <div class="material-cards">
 
-      <!-- BRICK TYPE -->
-      <div class="field-group">
-        <label for="brickType">Brick Type <span class="required">*</span></label>
-        <select id="brickType">
-          <option value="" disabled selected>— Select Brick Type —</option>
-          <option value="clay">Clay Brick</option>
-          <option value="flyash">Fly Ash Brick</option>
-          <option value="concrete">Concrete Brick</option>
-          <option value="sandlime">Sand Lime Brick</option>
-          <option value="interlocking">Interlocking Brick</option>
-        </select>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="form-section-title">
-        <span class="section-num">02</span>
-        <h2>Laboratory Test Parameters</h2>
-      </div>
-
-      <div class="fields-grid">
-
-        <div class="field-group">
-          <label for="compressiveStrength">
-            Compressive Strength
-            <span class="unit">(MPa)</span>
-          </label>
-          <input type="number" id="compressiveStrength" placeholder="e.g. 7.5" min="0" step="0.1" />
-          <span class="field-hint">Minimum acceptable varies by brick type</span>
-        </div>
-
-        <div class="field-group">
-          <label for="waterAbsorption">
-            Water Absorption
-            <span class="unit">(%)</span>
-          </label>
-          <input type="number" id="waterAbsorption" placeholder="e.g. 15" min="0" max="100" step="0.1" />
-          <span class="field-hint">Should not exceed IS code limits</span>
-        </div>
-
-        <div class="field-group">
-          <label for="efflorescence">
-            Efflorescence Level
-            <span class="unit">(Visual Rating)</span>
-          </label>
-          <select id="efflorescence">
-            <option value="" disabled selected>— Select Level —</option>
-            <option value="nil">Nil</option>
-            <option value="slight">Slight</option>
-            <option value="moderate">Moderate</option>
-            <option value="heavy">Heavy</option>
-            <option value="serious">Serious</option>
-          </select>
-          <span class="field-hint">Based on IS 3495 salt deposit test</span>
-        </div>
-
-        <div class="field-group">
-          <label for="dimensionTolerance">
-            Dimension Tolerance
-            <span class="unit">(mm)</span>
-          </label>
-          <input type="number" id="dimensionTolerance" placeholder="e.g. 3" min="0" step="0.5" />
-          <span class="field-hint">Deviation from standard dimensions</span>
-        </div>
-
-        <div class="field-group">
-          <label for="weight">
-            Weight
-            <span class="unit">(kg)</span>
-          </label>
-          <input type="number" id="weight" placeholder="e.g. 3.2" min="0" step="0.1" />
-          <span class="field-hint">Per individual brick unit</span>
-        </div>
-
-        <div class="field-group">
-          <label for="crackPresence">
-            Crack Presence
-          </label>
-          <select id="crackPresence">
-            <option value="" disabled selected>— Select —</option>
-            <option value="no">No</option>
-            <option value="yes">Yes</option>
-          </select>
-          <span class="field-hint">Visible cracks on surface or edges</span>
-        </div>
-
-        <div class="field-group">
-          <label for="shapeIrregularity">
-            Shape Irregularity
-          </label>
-          <select id="shapeIrregularity">
-            <option value="" disabled selected>— Select —</option>
-            <option value="no">No</option>
-            <option value="yes">Yes</option>
-          </select>
-          <span class="field-hint">Warping, chipping, or deformation</span>
-        </div>
-
-      </div>
-
-      <!-- EVALUATE BUTTON -->
-      <div class="btn-row">
-        <button id="evaluateBtn" onclick="evaluateBrick()">
-          <span class="btn-icon">▶</span>
-          Evaluate Brick
+        <button class="material-card" id="cardBrick" onclick="loadModule('brick')">
+          <div class="mcard-icon">⬛</div>
+          <div class="mcard-body">
+            <div class="mcard-title">Brick</div>
+            <div class="mcard-desc">Clay · Fly Ash · Concrete · Sand Lime · Interlocking</div>
+            <div class="mcard-meta">IS 1077 · IS 12894 · IS 2185 · IS 4139</div>
+          </div>
+          <div class="mcard-arrow">→</div>
         </button>
-        <button id="resetBtn" class="btn-secondary" onclick="resetForm()">
-          Reset
+
+        <button class="material-card" id="cardAggregate" onclick="loadModule('aggregate')">
+          <div class="mcard-icon">⬡</div>
+          <div class="mcard-body">
+            <div class="mcard-title">Aggregate</div>
+            <div class="mcard-desc">Coarse · Fine · Recycled · Crushed Stone</div>
+            <div class="mcard-meta">IS 383 · IS 2386</div>
+          </div>
+          <div class="mcard-arrow">→</div>
         </button>
+
+        <button class="material-card" id="cardSteel" onclick="loadModule('steel')">
+          <div class="mcard-icon">▬</div>
+          <div class="mcard-body">
+            <div class="mcard-title">Reinforcement Bar</div>
+            <div class="mcard-desc">Fe415 · Fe500 · Fe550 · Recycled Rebar</div>
+            <div class="mcard-meta">IS 1786 · IS 432</div>
+          </div>
+          <div class="mcard-arrow">→</div>
+        </button>
+
       </div>
     </section>
 
-    <!-- RESULT SECTION (hidden by default) -->
+    <!-- INFO BANNER (C&D context) -->
+    <section class="info-banner" id="infoBanner">
+      <div class="info-icon">♻</div>
+      <p>
+        <strong>Construction &amp; Demolition (C&amp;D) Waste Context:</strong>
+        Materials recovered from demolished structures must meet the same engineering standards as new materials
+        before being reused in construction. This system evaluates them against IS code thresholds to determine
+        fitness for reuse — supporting circular economy principles and reducing landfill burden.
+      </p>
+    </section>
+
+    <!-- DYNAMIC FORM AREA -->
+    <section id="formArea" style="display:none;"></section>
+
+    <!-- RESULT SECTION -->
     <section class="result-card" id="resultCard" style="display:none;">
       <div class="result-header">
-        <div class="form-section-title">
-          <span class="section-num">03</span>
-          <h2>Evaluation Result</h2>
-        </div>
+        <div class="step-pill">Step 03</div>
+        <h2>Evaluation Result</h2>
       </div>
-
       <div class="result-body">
-        <div class="result-meta">
-          <div class="meta-item">
-            <span class="meta-label">Brick Type</span>
-            <span class="meta-value" id="resBrickType">—</span>
-          </div>
-          <div class="meta-item">
-            <span class="meta-label">IS Code Reference</span>
-            <span class="meta-value" id="resISCode">—</span>
-          </div>
-          <div class="meta-item">
-            <span class="meta-label">Quality Score</span>
-            <span class="meta-value" id="resScore">—</span>
-          </div>
-          <div class="meta-item">
-            <span class="meta-label">Evaluation Date</span>
-            <span class="meta-value" id="resDate">—</span>
-          </div>
-        </div>
 
-        <div class="quality-badge-row">
-          <div class="quality-badge" id="qualityBadge">—</div>
-          <div class="quality-label" id="qualityLabel">Quality Rating</div>
+        <div class="result-meta" id="resultMeta"></div>
+
+        <div class="quality-row">
+          <div class="quality-block">
+            <div class="quality-badge" id="qualityBadge">—</div>
+            <div class="quality-label">Quality Rating</div>
+          </div>
+          <div class="score-block">
+            <div class="score-ring">
+              <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--border)" stroke-width="6"/>
+                <circle id="scoreArc" cx="40" cy="40" r="32" fill="none" stroke="var(--accent)" stroke-width="6"
+                  stroke-linecap="round" stroke-dasharray="201 201" stroke-dashoffset="201"
+                  transform="rotate(-90 40 40)"/>
+              </svg>
+              <span id="scoreNum">—</span>
+            </div>
+            <div class="score-label">Quality Score / 100</div>
+          </div>
         </div>
 
         <div class="recommendation-box" id="recommendationBox">
@@ -186,24 +124,31 @@
           <p id="recommendationText">—</p>
         </div>
 
-        <div class="reasons-box" id="reasonsBox">
-          <div class="reasons-title">Detailed Analysis</div>
+        <div class="reasons-box">
+          <div class="reasons-title">Detailed Parameter Analysis</div>
           <ul id="reasonsList"></ul>
         </div>
 
-        <div class="param-summary" id="paramSummary">
-          <div class="param-summary-title">Parameter Summary</div>
-          <table id="paramTable">
-            <thead>
-              <tr>
-                <th>Parameter</th>
-                <th>Entered Value</th>
-                <th>Acceptable Range</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="paramTableBody"></tbody>
-          </table>
+        <div class="param-summary">
+          <div class="param-summary-title">Parameter Summary Table</div>
+          <div class="table-wrap">
+            <table id="paramTable">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Entered Value</th>
+                  <th>Standard / Range</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="paramTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <button class="btn-primary" onclick="evalAgain()">← Evaluate Another</button>
+          <button class="btn-secondary" onclick="resetAll()">Reset</button>
         </div>
       </div>
     </section>
@@ -212,9 +157,18 @@
 
   <!-- FOOTER -->
   <footer class="site-footer">
-    <p>Smart Brick Quality Evaluation System &nbsp;|&nbsp; Interdisciplianry Mini Project </p>
+    <p>Smart C&amp;D Material Quality Evaluation System &nbsp;·&nbsp; Interdisciplinary Project </p>
+    <p class="footer-sub">Aligned with SDG 9 (Industry, Innovation and Infrastructure) &amp; SDG 11 (Sustainable Cities) &amp; SDG 12 (Responsible Consumption) </p> 
   </footer>
 
-  <script src="script.js"></script>
+  <!-- JS MODULES (load order matters) -->
+  <script src="js/utils.js"></script>
+  <script src="js/scoring.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/brick.js"></script>
+  <script src="js/aggregate.js"></script>
+  <script src="js/steel.js"></script>
+  <script src="js/main.js"></script>
+
 </body>
 </html>
