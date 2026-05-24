@@ -99,6 +99,11 @@
       <div class="result-body">
 
         <div class="result-meta" id="resultMeta"></div>
+        <!-- Sample photo display -->
+        <div class="result-sample-photo" id="resultSamplePhoto">
+          <div class="result-photo-title">Sample Photo</div>
+          <div id="resultPhotoContent"></div>
+        </div>
 
         <div class="quality-row">
           <div class="quality-block">
@@ -148,8 +153,40 @@
 
         <div class="result-actions">
           <button class="btn-primary" onclick="evalAgain()">← Evaluate Another</button>
+          <button class="btn-accent" onclick="saveCurrentSample()">+ &nbsp; Save Sample</button>
           <button class="btn-secondary" onclick="resetAll()">Reset</button>
         </div>
+      </div>
+    </section>
+    <!-- SAMPLE HISTORY PANEL -->
+    <section class="history-panel" id="historyPanel" style="display:none;">
+      <div class="history-header">
+        <div>
+          <div class="step-pill">Sample Log</div>
+          <h2>Evaluation History</h2>
+          <p id="historySummaryText" style="font-size:13.5px; color:var(--text-secondary); margin-top:6px;"></p>
+        </div>
+        <div class="history-actions">
+          <button class="btn-primary" onclick="exportToExcel()">↓ &nbsp; Export to Excel</button>
+          <button class="btn-secondary" onclick="clearHistory()">✕ &nbsp; Clear Log</button>
+        </div>
+      </div>
+
+      <div class="table-wrap" style="margin-top:20px;">
+        <table id="historyTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Material</th>
+              <th>Sub-type</th>
+              <th>Score</th>
+              <th>Quality</th>
+              <th>Photo</th>
+            </tr>
+          </thead>
+          <tbody id="historyTableBody"></tbody>
+        </table>
       </div>
     </section>
 
@@ -161,6 +198,8 @@
     <p class="footer-sub">Aligned with SDG 9 (Industry, Innovation and Infrastructure) &amp; SDG 11 (Sustainable Cities) &amp; SDG 12 (Responsible Consumption) </p> 
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
   <!-- JS MODULES (load order matters) -->
   <script src="js/utils.js"></script>
   <script src="js/scoring.js"></script>
@@ -168,6 +207,7 @@
   <script src="js/brick.js"></script>
   <script src="js/aggregate.js"></script>
   <script src="js/steel.js"></script>
+  <script src="js/history.js"></script>
   <script src="js/main.js"></script>
 
 </body>

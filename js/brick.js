@@ -42,9 +42,10 @@ const BRICK_CRITERIA = {
     good:           10.0,   /* IS 1077 Class 1 minimum */
     avg:            3.5,    /* IS 1077 Class 3 floor */
     standard:       'IS 1077: Class 1 ≥ 10 MPa | Class 2 ≥ 7.5 MPa | Class 3 ≥ 3.5 MPa',
+    codeRef:        'IS 1077 (Compressive Strength Test)',
     higherIsBetter: true,
     max:            50,
-    hint:           'Average of 5 brick samples tested flat; governs load-bearing capacity'
+    hint:           'Obtain by capping brick bed faces with mortar, curing, and crushing in a Compression Testing Machine flat-wise.'
   },
   waterAbsorption: {
     label:          'Water Absorption',
@@ -53,9 +54,10 @@ const BRICK_CRITERIA = {
     good:           15.0,   /* ≤ 15% for Class 1 / FA bricks */
     avg:            20.0,   /* ≤ 20% general permissible */
     standard:       'IS 1077: ≤ 15% (Class 1), ≤ 20% (Class 2 & 3)',
+    codeRef:        'IS 1077 (Water Absorption Test)',
     higherIsBetter: false,
     max:            40,
-    hint:           '24-hour cold water immersion test; lower is better for durability'
+    hint:           'Obtain by drying brick in an oven, weighing it, immersing in cold water for 24 hours, and calculating weight gain percentage.'
   },
   efflorescence: {
     label:          'Efflorescence Rating',
@@ -64,9 +66,10 @@ const BRICK_CRITERIA = {
     good:           1,      /* 0 = Nil, 1 = Slight — both acceptable */
     avg:            2,      /* 2 = Moderate — use with caution */
     standard:       'IS 1077: Nil (0) or Slight (1) — Pass; Moderate (2) — Marginal; Heavy/Serious (3–4) — Fail',
+    codeRef:        'IS 1077 (Efflorescence Test)',
     higherIsBetter: false,
     max:            4,
-    hint:           '0 = Nil · 1 = Slight · 2 = Moderate · 3 = Heavy · 4 = Serious'
+    hint:           'Obtain by placing brick end-up in a shallow water dish, letting water evaporate, and observing salt deposits. Scale: 0 = Nil · 1 = Slight · 2 = Moderate · 3 = Heavy · 4 = Serious'
   },
   dimensionalTolerance: {
     label:          'Dimensional Tolerance',
@@ -75,9 +78,10 @@ const BRICK_CRITERIA = {
     good:           3.0,    /* ≤ 3 mm max deviation from nominal */
     avg:            6.0,    /* ≤ 6 mm marginal */
     standard:       'IS 1077: ± 3 mm (Good), ± 6 mm (Marginal)',
+    codeRef:        'IS 1077 (Measurement of Dimensions)',
     higherIsBetter: false,
     max:            20,
-    hint:           'Largest absolute deviation from nominal dimension (L, W, or H)'
+    hint:           'Obtain by aligning 20 brick samples in a straight line, measuring overall length, width, and height, and dividing deviation from nominal.'
   },
   hardness: {
     label:          'Hardness (Scratch Test)',
@@ -86,9 +90,10 @@ const BRICK_CRITERIA = {
     good:           4,      /* 4–5 = finger-nail cannot scratch = good */
     avg:            3,      /* 3 = scratched with effort */
     standard:       'IS 1077: 5 = Very Hard · 4 = Hard · 3 = Medium · 2 = Soft · 1 = Very Soft',
+    codeRef:        'IS 1077 (Hardness / Scratch Test)',
     higherIsBetter: true,
     max:            5,
-    hint:           '5 = Cannot scratch · 4 = Resists nail · 3 = Slight scratch · 2 = Easy scratch · 1 = Powder'
+    hint:           'Obtain by attempting to scratch the brick surface with a fingernail, coin, or steel tool. Scale: 5 = Very Hard (no scratch) · 4 = Hard · 3 = Medium · 2 = Soft · 1 = Very Soft (powders)'
   }
 };
 
@@ -155,10 +160,22 @@ function renderBrickForm() {
             max="${cfg.max}"
             placeholder="e.g. ${_brickPlaceholder(key)}"
           />
-          <span class="field-hint">${cfg.standard}</span>
+          <span class="field-hint">${cfg.codeRef}</span>
         </div>
         `).join('')}
-
+          <div class="upload-zone">
+            <label>Sample Photo <span style="font-weight:400; text-transform:none; letter-spacing:0; color:var(--text-muted);">(optional)</span></label>
+            <input
+              class="upload-input"
+              type="file"
+              id="brick_sampleImage"
+              accept="image/*"
+            />
+            <div class="upload-preview" id="brick_imagePreview">
+              <img id="brick_previewImg" src="" alt="Sample preview" />
+              <div class="upload-filename" id="brick_fileName"></div>
+            </div>
+          </div>
       </div>
 
       <div class="btn-row">
@@ -172,6 +189,7 @@ function renderBrickForm() {
 
     </div>
   `;
+  setupImageUpload('brick_');
 }
 
 /* Helper: sensible placeholder values per parameter */
@@ -542,6 +560,14 @@ function evaluateBrick() {
 
   /* Step 6: Render all results into the shared result card */
   renderBrickResult(values, paramResults, scoreData, recommendation, brickClass);
+  renderSamplePhoto('brick_');
+
+  captureEvalPayload(
+    { score: scoreData.score, quality: scoreData.quality, paramResults },
+    'Brick',
+    values.brickType,
+    'brick_'
+  );
 }
 
 /* ----------------------------------------------------------------
@@ -575,6 +601,9 @@ function resetBrickForm() {
 
   const badge = document.getElementById('qualityBadge');
   if (badge) { badge.textContent = '—'; badge.className = 'quality-badge'; }
+  clearImageUpload('brick_');
+  const rp = document.getElementById('resultPhotoContent');
+  if (rp) rp.innerHTML = '';
 }
 
 /* Called by main.js MODULE_REGISTRY dispatcher when 'brick' is selected */
