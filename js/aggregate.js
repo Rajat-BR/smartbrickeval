@@ -22,13 +22,14 @@ const AGGREGATE_CRITERIA = {
   specificGravity: {
     label:          'Specific Gravity',
     unit:           '',
-    weight:         20,
+    weight:         15,
     good:           2.6,
     avg:            2.5,
     standard:       'IS 2386 (Pt III): 2.5 – 3.0',
+    codeRef:        'IS 2386 Part III (Specific Gravity Test)',
     higherIsBetter: true,
     max:            3.2,
-    hint:           'Typical range: 2.5 – 3.0 for natural aggregates'
+    hint:           'Obtain by dividing dry weight of aggregate by the volume of water displaced by the saturated surface-dry aggregate.'
   },
   waterAbsorption: {
     label:          'Water Absorption',
@@ -37,31 +38,34 @@ const AGGREGATE_CRITERIA = {
     good:           2.0,
     avg:            5.0,
     standard:       'IS 2386 (Pt III): < 2% (Good), < 5% (Avg)',
+    codeRef:        'IS 2386 Part III (Water Absorption Test)',
     higherIsBetter: false,
     max:            15,
-    hint:           '< 2% for structural concrete; < 5% generally acceptable'
+    hint:           'Obtain by oven-drying the saturated aggregate sample and measuring the weight change percentage after immersion.'
   },
   crushingValue: {
     label:          'Aggregate Crushing Value',
     unit:           '%',
-    weight:         25,
+    weight:         20,
     good:           30,
     avg:            45,
     standard:       'IS 2386 (Pt IV): < 30% (Good), < 45% (Avg)',
+    codeRef:        'IS 2386 Part IV (Aggregate Crushing Test)',
     higherIsBetter: false,
     max:            60,
-    hint:           '< 30% for wearing surfaces; < 45% for other uses'
+    hint:           'Obtain by compressing aggregate in a cylinder at a standard load rate, then measuring the percentage of crushed fines passing a 2.36mm sieve.'
   },
   impactValue: {
     label:          'Aggregate Impact Value',
     unit:           '%',
-    weight:         20,
+    weight:         15,
     good:           25,
     avg:            35,
     standard:       'IS 2386 (Pt IV): < 25% (Good), < 35% (Avg)',
+    codeRef:        'IS 2386 Part IV (Aggregate Impact Test)',
     higherIsBetter: false,
     max:            60,
-    hint:           '< 25% for pavement; < 35% for general concrete'
+    hint:           'Obtain by subjecting aggregate to 15 blows from a standard falling hammer, then measuring the percentage of crushed fines passing a 2.36mm sieve.'
   },
   flakinessIndex: {
     label:          'Flakiness Index',
@@ -70,20 +74,34 @@ const AGGREGATE_CRITERIA = {
     good:           20,
     avg:            25,
     standard:       'IS 2386 (Pt I): < 20% (Good), < 25% (Avg)',
+    codeRef:        'IS 2386 Part I (Flakiness Index Test)',
     higherIsBetter: false,
     max:            60,
-    hint:           'Elongated particles reduce workability and strength'
+    hint:           'Obtain by passing aggregate through a standard thickness gauge to measure the percentage weight of flat/thin particles.'
   },
-  bulkDensity: {
-    label:          'Bulk Density (Loose)',
-    unit:           'kg/m³',
+  elongationIndex: {
+    label:          'Elongation Index',
+    unit:           '%',
     weight:         10,
-    good:           1500,
-    avg:            1300,
-    standard:       'IS 383: 1300 – 1700 kg/m³',
+    good:           25,
+    avg:            35,
+    standard:       'IS 2386 (Pt I): < 25% (Good), < 35% (Avg)',
+    codeRef:        'IS 2386 Part I (Elongation Index Test)',
+    higherIsBetter: false,
+    max:            60,
+    hint:           'Obtain by passing aggregate through a standard length gauge to measure the percentage weight of elongated particles.'
+  },
+  angularityNumber: {
+    label:          'Angularity Number',
+    unit:           '',
+    weight:         15,
+    good:           7,
+    avg:            5,
+    standard:       'IS 2386 (Pt I): 7–10 (Good), 5–7 (Avg)',
+    codeRef:        'IS 2386 Part I (Angularity Number Test)',
     higherIsBetter: true,
-    max:            2000,
-    hint:           'Higher bulk density indicates denser, stronger aggregate'
+    max:            11,
+    hint:           'Obtain by measuring the percentage voids in aggregate packed in a cylinder; angularity number = (67 - % solid volume). Higher indicates more angular particles.'
   }
 };
 
@@ -146,10 +164,22 @@ function renderAggregateForm() {
             max="${cfg.max}"
             placeholder="e.g. ${_aggPlaceholder(key)}"
           />
-          <span class="field-hint">${cfg.standard}</span>
+          <span class="field-hint">${cfg.codeRef}</span>
         </div>
         `).join('')}
-
+          <div class="upload-zone">
+            <label>Sample Photo <span style="font-weight:400; text-transform:none; letter-spacing:0; color:var(--text-muted);">(optional)</span></label>
+            <input
+              class="upload-input"
+              type="file"
+              id="agg_sampleImage"
+              accept="image/*"
+            />
+            <div class="upload-preview" id="agg_imagePreview">
+              <img id="agg_previewImg" src="" alt="Sample preview" />
+              <div class="upload-filename" id="agg_fileName"></div>
+            </div>
+          </div>
       </div>
 
       <!-- Action buttons -->
@@ -164,17 +194,19 @@ function renderAggregateForm() {
 
     </div>
   `;
+  setupImageUpload('agg_');
 }
 
 /* Helper: sensible placeholder values per parameter */
 function _aggPlaceholder(key) {
   const defaults = {
-    specificGravity: '2.65',
-    waterAbsorption: '1.5',
-    crushingValue:   '25',
-    impactValue:     '22',
-    flakinessIndex:  '20',
-    bulkDensity:     '1500'
+    specificGravity:  '2.65',
+    waterAbsorption:  '1.5',
+    crushingValue:    '25',
+    impactValue:      '22',
+    flakinessIndex:   '20',
+    elongationIndex:  '22',
+    angularityNumber: '7'
   };
   return defaults[key] || '0';
 }
@@ -492,6 +524,14 @@ function evaluateAggregate() {
 
   /* Step 5: Render results to DOM */
   renderAggregateResult(values, paramResults, scoreData, recommendation);
+  renderSamplePhoto('agg_');
+
+  captureEvalPayload(
+    { score: scoreData.score, quality: scoreData.quality, paramResults },
+    'Aggregate',
+    values.aggregateType,
+    'agg_'
+  );
 }
 
 /* ----------------------------------------------------------------
@@ -525,6 +565,9 @@ function resetAggregateForm() {
 
   const badge = document.getElementById('qualityBadge');
   if (badge) { badge.textContent = '—'; badge.className = 'quality-badge'; }
+  clearImageUpload('agg_');
+  const rp = document.getElementById('resultPhotoContent');
+  if (rp) rp.innerHTML = '';
 }
 
 /* Called by main.js when this module is selected */

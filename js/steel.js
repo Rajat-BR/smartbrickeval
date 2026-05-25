@@ -48,9 +48,10 @@ const STEEL_CRITERIA = {
     good:           500,   /* ≥ Fe500 threshold */
     avg:            415,   /* ≥ Fe415 threshold */
     standard:       'IS 1786: Fe415 ≥ 415 | Fe500 ≥ 500 | Fe550 ≥ 550 MPa',
+    codeRef:        'IS 1786 (Yield Strength Test)',
     higherIsBetter: true,
     max:            700,
-    hint:           'Minimum proof stress; governs structural design load capacity'
+    hint:           'Obtain by pulling the rebar in a Universal Testing Machine (UTM) to measure 0.2% proof stress.'
   },
   tensileStrength: {
     label:          'Ultimate Tensile Strength',
@@ -59,9 +60,10 @@ const STEEL_CRITERIA = {
     good:           545,   /* ≥ Fe500 UTS */
     avg:            485,   /* ≥ Fe415 UTS */
     standard:       'IS 1786: Fe415 ≥ 485 | Fe500 ≥ 545 | Fe550 ≥ 585 MPa',
+    codeRef:        'IS 1786 (Tensile Strength Test)',
     higherIsBetter: true,
     max:            800,
-    hint:           'Must exceed yield strength by IS 1786 ratio (≥ 1.08×)'
+    hint:           'Obtain by pulling the rebar in a Universal Testing Machine (UTM) until final failure to record the maximum stress.'
   },
   elongation: {
     label:          'Elongation at Fracture',
@@ -70,9 +72,10 @@ const STEEL_CRITERIA = {
     good:           12,    /* ≥ Fe500 minimum */
     avg:            10,    /* ≥ Fe550 minimum (lower grade floor) */
     standard:       'IS 1786: Fe415 ≥ 14.5% | Fe500 ≥ 12% | Fe550 ≥ 10%',
+    codeRef:        'IS 1786 (Elongation Measurement)',
     higherIsBetter: true,
     max:            35,
-    hint:           'Ductility indicator — critical for seismic & dynamic loading'
+    hint:           'Obtain by measuring the distance between gauge marks before and after fracture of the rebar specimen.'
   },
   diameterTolerance: {
     label:          'Diameter Tolerance',
@@ -81,9 +84,10 @@ const STEEL_CRITERIA = {
     good:           0.5,   /* ≤ 0.5 mm deviation: PASS */
     avg:            1.0,   /* ≤ 1.0 mm: WARN */
     standard:       'IS 1786: ± 0.5 mm (Good), ± 1.0 mm (Marginal)',
+    codeRef:        'IS 1786 (Diameter Tolerance Check)',
     higherIsBetter: false,
     max:            5,
-    hint:           'Absolute deviation from nominal diameter; affects bond strength'
+    hint:           'Obtain by measuring the actual rebar diameter at three cross-sections using a vernier caliper.'
   },
   weightPerMeter: {
     label:          'Weight per Metre Deviation',
@@ -92,9 +96,10 @@ const STEEL_CRITERIA = {
     good:           3,  /* within ±3% of theoretical: enter actual abs deviation fraction */
     avg:            5,  /* within ±5% */
     standard:       'IS 1786: Tolerance ± 3% (Good), ± 5% (Marginal) of theoretical',
+    codeRef:        'IS 1786 (Weight per Metre Check)',
     higherIsBetter: false,
     max:            1.0,
-    hint: 'Enter absolute % deviation from theoretical weight (e.g. 2.5 for 2.5% under/over)'
+    hint:           'Obtain by weighing a known length of rebar sample (minimum 0.5m) and calculating percentage deviation from nominal weight.'
   }
 };
 
@@ -168,10 +173,22 @@ function renderSteelForm() {
             max="${cfg.max}"
             placeholder="e.g. ${_steelPlaceholder(key)}"
           />
-          <span class="field-hint">${cfg.standard}</span>
+          <span class="field-hint">${cfg.codeRef}</span>
         </div>
         `).join('')}
-
+          <div class="upload-zone">
+            <label>Sample Photo <span style="font-weight:400; text-transform:none; letter-spacing:0; color:var(--text-muted);">(optional)</span></label>
+            <input
+              class="upload-input"
+              type="file"
+              id="steel_sampleImage"
+              accept="image/*"
+            />
+            <div class="upload-preview" id="steel_imagePreview">
+              <img id="steel_previewImg" src="" alt="Sample preview" />
+              <div class="upload-filename" id="steel_fileName"></div>
+            </div>
+          </div>
       </div>
 
       <div class="btn-row">
@@ -185,6 +202,7 @@ function renderSteelForm() {
 
     </div>
   `;
+  setupImageUpload('steel_');
 }
 
 /* Helper: representative placeholder values per parameter */
@@ -563,6 +581,14 @@ function evaluateSteel() {
 
   /* Step 6: Render to DOM */
   renderSteelResult(values, paramResults, scoreData, recommendation, steelGrade);
+  renderSamplePhoto('steel_');
+
+  captureEvalPayload(
+    { score: scoreData.score, quality: scoreData.quality, paramResults },
+    'Steel',
+    values.barType,
+    'steel_'
+  );
 }
 
 /* ----------------------------------------------------------------
@@ -596,6 +622,9 @@ function resetSteelForm() {
 
   const badge = document.getElementById('qualityBadge');
   if (badge) { badge.textContent = '—'; badge.className = 'quality-badge'; }
+  clearImageUpload('steel_');
+  const rp = document.getElementById('resultPhotoContent');
+  if (rp) rp.innerHTML = '';
 }
 
 /* Called by main.js dispatcher when 'steel' module is selected */

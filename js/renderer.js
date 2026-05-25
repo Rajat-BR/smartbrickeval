@@ -536,6 +536,79 @@ function buildDateMetaItem() {
   return buildMetaItem('Evaluated On', getTodayFormatted());
 }
 
+/* ----------------------------------------------------------------
+   IMAGE UPLOAD — shared across all three modules
+   ---------------------------------------------------------------- */
+
+function setupImageUpload(prefix) {
+  const input   = document.getElementById(prefix + 'sampleImage');
+  const preview = document.getElementById(prefix + 'imagePreview');
+  const img     = document.getElementById(prefix + 'previewImg');
+  const name    = document.getElementById(prefix + 'fileName');
+  if (!input || !preview || !img || !name) return;
+
+  input.addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file || !file.type.startsWith('image/')) {
+      preview.style.display = 'none';
+      img.src = '';
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = e => {
+      img.src           = e.target.result;
+      name.textContent  = file.name;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function clearImageUpload(prefix) {
+  const input   = document.getElementById(prefix + 'sampleImage');
+  const preview = document.getElementById(prefix + 'imagePreview');
+  const img     = document.getElementById(prefix + 'previewImg');
+  if (input)   input.value      = '';
+  if (preview) preview.style.display = 'none';
+  if (img)     img.src          = '';
+}
+
+/* ----------------------------------------------------------------
+   RESULT CARD SAMPLE PHOTO RENDERER
+   Called by renderResult() in each module after evaluation.
+   prefix — the module's field prefix e.g. 'steel_', 'agg_', 'brick_'
+   ---------------------------------------------------------------- */
+function renderSamplePhoto(prefix) {
+  const photoContent = document.getElementById('resultPhotoContent');
+  if (!photoContent) return;
+
+  const input = document.getElementById(prefix + 'sampleImage');
+  const file  = input && input.files && input.files[0];
+
+  if (file && file.type.startsWith('image/')) {
+    /* Image was uploaded — show it */
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      photoContent.innerHTML = `
+        <img
+          class="result-photo-img"
+          src="${e.target.result}"
+          alt="Sample: ${file.name}"
+        />
+        <div class="result-photo-filename">${file.name}</div>
+      `;
+    };
+    reader.readAsDataURL(file);
+  } else {
+    /* No image — show placeholder */
+    photoContent.innerHTML = `
+      <div class="result-photo-placeholder">
+        <span>⬜</span>
+        <span>No image provided for this sample</span>
+      </div>
+    `;
+  }
+}
 
 /* ================================================================
    SECTION 12: PUBLIC API SUMMARY
