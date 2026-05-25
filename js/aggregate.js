@@ -22,7 +22,7 @@ const AGGREGATE_CRITERIA = {
   specificGravity: {
     label:          'Specific Gravity',
     unit:           '',
-    weight:         20,
+    weight:         15,
     good:           2.6,
     avg:            2.5,
     standard:       'IS 2386 (Pt III): 2.5 – 3.0',
@@ -46,7 +46,7 @@ const AGGREGATE_CRITERIA = {
   crushingValue: {
     label:          'Aggregate Crushing Value',
     unit:           '%',
-    weight:         25,
+    weight:         20,
     good:           30,
     avg:            45,
     standard:       'IS 2386 (Pt IV): < 30% (Good), < 45% (Avg)',
@@ -58,7 +58,7 @@ const AGGREGATE_CRITERIA = {
   impactValue: {
     label:          'Aggregate Impact Value',
     unit:           '%',
-    weight:         20,
+    weight:         15,
     good:           25,
     avg:            35,
     standard:       'IS 2386 (Pt IV): < 25% (Good), < 35% (Avg)',
@@ -79,17 +79,29 @@ const AGGREGATE_CRITERIA = {
     max:            60,
     hint:           'Obtain by passing aggregate through a standard thickness gauge to measure the percentage weight of flat/thin particles.'
   },
-  bulkDensity: {
-    label:          'Bulk Density (Loose)',
-    unit:           'kg/m³',
+  elongationIndex: {
+    label:          'Elongation Index',
+    unit:           '%',
     weight:         10,
-    good:           1500,
-    avg:            1300,
-    standard:       'IS 383: 1300 – 1700 kg/m³',
-    codeRef:        'IS 383 (Bulk Density Check)',
+    good:           25,
+    avg:            35,
+    standard:       'IS 2386 (Pt I): < 25% (Good), < 35% (Avg)',
+    codeRef:        'IS 2386 Part I (Elongation Index Test)',
+    higherIsBetter: false,
+    max:            60,
+    hint:           'Obtain by passing aggregate through a standard length gauge to measure the percentage weight of elongated particles.'
+  },
+  angularityNumber: {
+    label:          'Angularity Number',
+    unit:           '',
+    weight:         15,
+    good:           7,
+    avg:            5,
+    standard:       'IS 2386 (Pt I): 7–10 (Good), 5–7 (Avg)',
+    codeRef:        'IS 2386 Part I (Angularity Number Test)',
     higherIsBetter: true,
-    max:            2000,
-    hint:           'Obtain by filling a standard measure container of known volume with aggregate, weighing it, and calculating the mass per unit volume.'
+    max:            11,
+    hint:           'Obtain by measuring the percentage voids in aggregate packed in a cylinder; angularity number = (67 - % solid volume). Higher indicates more angular particles.'
   }
 };
 
@@ -188,12 +200,13 @@ function renderAggregateForm() {
 /* Helper: sensible placeholder values per parameter */
 function _aggPlaceholder(key) {
   const defaults = {
-    specificGravity: '2.65',
-    waterAbsorption: '1.5',
-    crushingValue:   '25',
-    impactValue:     '22',
-    flakinessIndex:  '20',
-    bulkDensity:     '1500'
+    specificGravity:  '2.65',
+    waterAbsorption:  '1.5',
+    crushingValue:    '25',
+    impactValue:      '22',
+    flakinessIndex:   '20',
+    elongationIndex:  '22',
+    angularityNumber: '7'
   };
   return defaults[key] || '0';
 }
